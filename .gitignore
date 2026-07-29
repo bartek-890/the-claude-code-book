@@ -1,0 +1,4 @@
+# Export scaffolding, not book content — regenerated with the chapters.
+book/_manifest.json
+
+.DS_Store
