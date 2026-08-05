@@ -23,7 +23,7 @@ It is written for an engineer who has already installed Claude Code, run a few s
 the ceiling: the agent forgets instructions halfway through, ignores `CLAUDE.md`, burns tokens on
 files nobody asked for, or declares work done that is not.
 
-Behaviour was checked against **Claude Code v2.1.210–219, July 2026**, and version-gated facts
+Behaviour was checked against **Claude Code v2.1.210–220, August 2026**, and version-gated facts
 carry the release that introduced them. Where this book and your terminal disagree, your terminal
 is right. Every claim's source is listed in [Appendix F](book/appendix-f-sources.md).
 

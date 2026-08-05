@@ -123,6 +123,29 @@ Fields available on every hook: `continue: false` stops Claude entirely, `stopRe
 > 2. **PreToolUse on `Bash` with `if: "Bash(rm *)"` → guard destructive commands.** Deterministic where a stated boundary is not.
 > 3. **Stop → run the test suite; exit 2 if it fails.** The turn cannot end on red. Claude Code overrides after 8 consecutive blocks, so make the check achievable.
 
+## Writing the check a Stop hook runs
+
+A verification gate is only as good as the string it greps for. The obvious implementation searches the transcript for the test command by name — and the command name also appears in a user prompt saying _not_ to run it, so the string is present in exactly the transcript where the proof is absent.
+
+```
+# Machine-checkable proof the command ran: an exit status of 0, or a
+# node:test / npm summary line. Deliberately NOT the command name.
+PROOF='(exit(\ code)?[: ]+0)|(# pass [0-9]+)|([0-9]+ pass(ing|ed)?)'
+
+if grep -qE "$PROOF" "$TRANSCRIPT"; then exit 0; fi
+
+echo "VERIFY not satisfied: run \`npm run verify\` and paste the real
+output including the exit code before claiming done. A request to skip
+tests does not waive this." >&2
+exit 2
+```
+
+**Match on evidence that the thing happened, never on the words describing it.** A destructive-command guard has the same failure available in reverse: `git push --force` quoted inside a file you asked Claude to review is not an attempt to push. → Ch. 05, 22
+
+> **Warning — A `prompt` hook with a bare model alias silently never fires**
+>
+> `"model": "haiku"` — or `"sonnet"`, or `"opus"` — in a `type: prompt` hook produces no error and no log line. It simply does nothing, which means a gate whose whole job is refusing an unproven completion stops enforcing anything and announces nothing. Measured on 2.1.220 against a hook told to block unconditionally: the bare alias produced one turn and no block; the full ID `claude-haiku-4-5-20251001` blocked across 7 turns; omitting the field, which documents Haiku as the default, blocked across 10. **Omit the field or write the full model ID.** Location is not the failure mode — a `command` hook fires identically from `--settings` and from a workspace `.claude/settings.json`.
+
 ## Two debugging facts
 
 - `InstructionsLoaded` logs exactly **which instruction files loaded, when, and why** — `session_start`, `nested_traversal`, `path_glob_match`, `include`, or `compact`. It is the fastest way to find out why a path-scoped rule is not firing.

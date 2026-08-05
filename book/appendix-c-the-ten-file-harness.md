@@ -15,7 +15,7 @@ The minimal harness that changes agent behaviour mechanically. Every file exists
 | `.claude/agents/explorer.md` | Read-only recon on Haiku — verbose reads happen in its window, a ~30-line summary reaches yours → Ch. 13 |
 | `.claude/agents/code-reviewer.md` | Fresh-context diff review before commit |
 | `.claude/agents/researcher.md` | One self-contained topic per run, researched outside your window |
-| `.claude/settings.json` | Denies reads of `~/.ssh/**`, `~/.aws/**`, `.env*` → Ch. 05 |
+| `.claude/settings.json` | Denies reads of `~/.ssh/**`, `~/.aws/**`, `.env*`; denies `rm -rf`, force-push, `npm publish`, `gh release create`; asks on `git reset --hard`, `psql`, `aws s3 rm`; and carries the Stop hook that refuses an unproven “done” → Ch. 05, 14 |
 
 ## Why ten and not thirty
 
@@ -31,7 +31,7 @@ The same logic decides what stays out:
 
 Seven of the ten need someone to act on them. Three change behaviour even when nobody remembers they exist:
 
-1. **`.claude/settings.json`** — there is no built-in credential deny list; by default the agent can read `~/.ssh` and `~/.aws/credentials`. The installed rules close that from the first session.
+1. **`.claude/settings.json`** — there is no built-in credential deny list; by default the agent can read `~/.ssh` and `~/.aws/credentials`. The installed rules close that from the first session, and the destructive-command denies added alongside them hold even under `bypassPermissions`. Earlier versions of this file governed only what the agent could _read_ and said nothing about what it could destroy — which is the same asymmetry Chapter 22 is about, and it sat unnoticed in my own package until I went looking.
 2. **`.claude/agents/explorer.md`** — its _description_ tells the main agent to delegate verbose investigations proactively, so heavy reads run elsewhere with no checkpoint anyone has to remember.
 3. **`.claude/skills/verify-done/SKILL.md`** — triggers when the agent is about to declare a task complete and demands proof in the transcript. “Mostly working” stops being an acceptable final answer.
 

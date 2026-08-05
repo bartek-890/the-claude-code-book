@@ -167,7 +167,32 @@ command, and open decisions. Drop exploratory reads and superseded plans.
 
 ## Unattended
 
-**P-13 · Goal condition · all three parts present**
+**P-13 · Reversibility gate · before you delegate anything consequential**
+
+```
+Before implementing, answer these and stop for my confirmation:
+
+1. DOOR: Is this reversible? What exactly reverses it, and what does
+   that cost — time, data loss, external effects?
+2. BLAST RADIUS: What else breaks if this is wrong — this module,
+   shared data, external consumers?
+3. CONVERSION: If it is irreversible, what is the cheapest change that
+   makes it reversible (branch, flag, down migration, dry run, backup,
+   build-time check)? Propose it.
+4. OPTIONS: At most three distinct approaches, then stop and recommend
+   one. Do not enumerate further.
+5. FALSIFIER: What single observation would show this was the wrong
+   call? State it as something measurable.
+6. If this is a one-way door: assume we shipped it and it failed badly.
+   List the three most likely causes and what each costs to fix.
+
+If every answer is "reversible, contained, cheap to undo", say so in
+one line and proceed without waiting.
+```
+
+That last line carries as much weight as the questions. A gate that fires on every decision is the slow, deliberate process applied to work that never needed it, and an agent that stops to deliberate about a variable rename has cost you the advantage you delegated for. The prompt is the ergonomic layer, not the boundary — it runs the reasoning while you are watching, and it drifts like every other instruction. The deny and ask rules are what still hold when the session is long and nobody is reading the diff. → Ch. 05
+
+**P-14 · Goal condition · all three parts present**
 
 ```
 /goal `<named command>` exits 0 and `git status` is clean,
@@ -175,7 +200,7 @@ command, and open decisions. Drop exploratory reads and superseded plans.
       or stop after 20 turns
 ```
 
-**P-14 · Headless fan-out unit · test on 3 files first**
+**P-15 · Headless fan-out unit · test on 3 files first**
 
 ```
 Migrate $file from <old> to <new>. Run <test command for that file>.
@@ -184,7 +209,7 @@ Return exactly "OK" or "FAIL: <one-line reason>". Nothing else.
 
 ## Onboarding
 
-**P-15 · Senior-engineer questions · ask directly, no framing needed**
+**P-16 · Senior-engineer questions · ask directly, no framing needed**
 
 ```
 How does <logging | auth | caching> work here? Show me the smallest
@@ -199,7 +224,7 @@ Look through <Symbol>'s git history and summarize how its API came to be.
 
 ## Harness maintenance
 
-**P-16 · CLAUDE.md audit · run it quarterly**
+**P-17 · CLAUDE.md audit · run it quarterly**
 
 ```
 Read @CLAUDE.md. For each line, answer: could a competent new contributor
@@ -210,7 +235,7 @@ instead — a path-scoped rule, a skill, a hook, or deleted. Don't edit
 the file yet.
 ```
 
-**P-17 · Write me a hook · Claude writes its own guardrails**
+**P-18 · Write me a hook · Claude writes its own guardrails**
 
 ```
 Write a PostToolUse hook that runs <formatter> after every Edit or Write,
@@ -220,7 +245,7 @@ outside the project directory.
 Put them in .claude/settings.json. Show me the file before writing it.
 ```
 
-**P-18 · Turn a habit into a skill · after the third repeat**
+**P-19 · Turn a habit into a skill · after the third repeat**
 
 ```
 I've pasted these same instructions three times now: [paste them]

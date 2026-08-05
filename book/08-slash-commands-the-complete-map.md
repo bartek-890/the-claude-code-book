@@ -37,7 +37,7 @@ The official list is long and grows weekly. This is the whole surface, grouped b
 | --- | --- | --- |
 | `/context [all]` | — | **Colored grid of what is filling the window**, with optimisation suggestions and a warning, with the exact number, when the conversation has run past the limit. Run this before you optimise anything. |
 | `/compact [instr]` | — | Summarise the conversation to free space. Always pass instructions. |
-| `/memory` | — | Browse and edit `CLAUDE.md` files and auto-memory; toggle auto memory on or off. |
+| `/memory [trim]` | — | Browse and edit `CLAUDE.md` files and auto-memory; toggle auto memory on or off. `trim` drops old entries when the index has grown past what loads. On a repo you have used for months this is not empty, and you have never read it. |
 | `/btw [question]` | — | Side question in a dismissible overlay that **never enters history**. Run it bare to reopen the last one. |
 | `/copy [N]` | — | Copy the last assistant response; `/copy 2` takes the one before it. With code blocks present you get a picker — press `w` to write the selection to a file instead, which is how you get output off a remote box. |
 | `/export [file]` | — | Export the conversation as plain text. |

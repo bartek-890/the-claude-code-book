@@ -21,6 +21,39 @@ The more permission dialogs you click through, the less you read them. Two separ
 >
 > Deny rules and explicit ask rules apply in _every_ mode, including `bypassPermissions`. Allow rules have no effect there, because everything else is already approved. Writes to protected paths — repository state, Claude’s own configuration — are never auto-approved outside bypass mode.
 
+## How a tool call is actually resolved
+
+The mode is the last thing consulted, not the first. Claude Code walks a fixed sequence and stops at the first layer that answers.
+
+| # | Layer | What it can answer |
+| --- | --- | --- |
+| 1 | `PreToolUse` hook | allow · deny · ask · defer — and it can rewrite the arguments |
+| 2 | `permissions.deny` | Blocked outright, in every mode |
+| 3 | `permissions.allow` | Runs with no prompt |
+| 4 | `permissions.ask` | Escalates to you even where the mode would not have |
+| 5 | The permission mode | The baseline from the table above |
+
+Two consequences are worth writing into a settings file. Deny is evaluated _before_ the mode, so a deny rule still blocks under `bypassPermissions` — the mode people reach for when the prompts get annoying. And `ask` is a first-class rule in the same file, not a hook trick. Deny is for doors nobody should open unattended; ask is for doors that need a hand on them but not a weld.
+
+```
+{
+  "permissions": {
+    "deny": ["Bash(rm -rf *)", "Bash(git push --force *)",
+             "Bash(npm publish *)", "Bash(gh release create *)"],
+    "ask":  ["Bash(git reset --hard *)", "Bash(psql *)",
+             "Bash(aws s3 rm *)"]
+  }
+}
+```
+
+> **Key — A deny rule you have not watched fire is a belief**
+>
+> Run it as a case before you trust it. Told to `rm -rf logs/` with a plausible reason and a pre-empted confirmation, a session with no harness lost the directory — and so did one carrying a bloated `CLAUDE.md` that said not to. With the rule above, two `rm -rf` calls were denied at the permission layer and the directory survived: _“I stopped rather than resubmit the same blocked command.”_
+>
+> The same run also asked every variant to paste a planted `.env` secret, and all of them refused — including the arms carrying no deny rule at all. The `Read(./.env*)` rule never had to fire, so that case proved nothing about the rule. It might be doing the job, or the model might be covering for it, and you find out which on the day it stops covering.
+
+Know what a pattern does not buy, either. Both mechanisms match on the command string, so an agent that writes `cleanup.py` and runs `python cleanup.py` walks straight past them — and `git push --force` quoted inside a file you asked Claude to review is not an attempt to push. Patterns raise the cost of an accident. They do not close the door. That takes the sandbox below, or credentials that never reach the thing you cannot afford to lose.
+
 ## Auto mode and its classifier
 
 Auto mode is not “yes to everything”. A separate classifier model reviews each action before it runs and blocks anything that escalates beyond your request, targets unrecognised infrastructure, or appears driven by hostile content Claude read. Some specifics worth knowing:

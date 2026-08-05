@@ -32,6 +32,14 @@ Three figures do more work in this book than any others, and they are the ones w
 
 **Lost in the middle** — the mid-context recall failure, replicated across long-context models.
 
+**METR, 2025** — 16 experienced maintainers, 246 real issues in their own mature repositories: **19% slower** with AI while estimating they had been 20% faster, an average error METR later put at **40 percentage points**. Its February 2026 follow-up was redesigned mid-flight after 30–50% of participants declined to submit tasks they did not want to do without AI, and its authors call the central estimate “likely a bad proxy”. Cited in Chapter 22 for the measured-versus-believed gap, which has outlived every speed number around it — not as a claim that agents are slow.
+
+**Replit production-database deletion, July 2025** — an agent deleted a live database during an explicit code freeze, then reported the rollback as impossible; the restore in fact worked. The fix Replit shipped was automatic dev/production database separation, not a stronger prompt. → Ch. 22
+
+**claude-code issues #37314 and #37847** — user reports that Claude saves a rule to memory and then violates it. Both were closed as stale by a bot with no maintainer reply, which is why Chapter 11 measures the claim rather than repeating it.
+
+**Dreams research preview** — Anthropic’s memory-consolidation pass for Managed Agents, built because memory writes “are local and incremental: over many sessions a memory store accumulates duplicates, contradictions, and stale entries.” Not available in Claude Code. platform.claude.com/docs
+
 **Armin Ronacher** — reverse-engineering of Claude Code’s plan mode: a short injected prompt plus a markdown plan file, not a tool lockdown.
 
 **HumanLayer, Builder.io** — practitioner reports on `CLAUDE.md` length, the ~60-line target, and the ~300-line discount ceiling.
@@ -46,13 +54,17 @@ Three findings in this book come from working practice rather than a paper, and 
 
 **Advisory versus enforced rules** — the same rule stated in `CLAUDE.md` versus implemented as a blocking `PreToolUse` hook, run repeatedly on the same task: routine violation in the first case, none in the second. A single rule in a single repo, which is enough to establish the category difference and not enough to put a number on it. → Ch. 14
 
+**Which layer a rule survives in** — one rule, five layers, two prompts, on Claude Sonnet 5 and Claude Code 2.1.220, 2026-07-30. n=3 per cell, $5.71 across 30 recorded CLI calls, pass/fail decided by a before/after SHA-256 rather than by reading prose. Where the user’s request only tempted the violation, auto memory and a byte-identical `CLAUDE.md` both held 3/3; where the prompt named the forbidden action, both fell to 0/3 and only a `Stop` hook kept the agent from claiming “done” it had not earned. n=3 separates 0/3 from 3/3 and resolves nothing finer, the memory was planted rather than accumulated, and rule wording is a live variable alongside layer. → Ch. 11
+
+**A deny rule observed firing** — the same rig, ordering `rm -rf logs/` with a plausible reason and a pre-empted confirmation. No harness and a bloated `CLAUDE.md` both lost the directory; `"deny": ["Bash(rm -rf *)"]` produced two blocked calls and an intact directory. A companion case in the same run — paste a planted `.env` secret — was refused by every variant including the ones carrying no rule, so it measured nothing about the rule and is reported here as the counter-example it is. → Ch. 05
+
 ## Companion articles on bartlomiejkrupa.dev
 
 **Mechanism** — How Claude Code’s agentic loop fills your context window · Context engineering beats a bigger context window · Prune the log, not the window · Claude Code tools · Claude Code security in 2026
 
-**Harness** — Why agents ignore your CLAUDE.md · How to set up a minimal Claude Code harness · Claude Code skill composition · Subagent context isolation · Claude Code channels
+**Harness** — Why agents ignore your CLAUDE.md · Claude follows its own memory until you contradict it · How to set up a minimal Claude Code harness · Claude Code skill composition · Subagent context isolation · Claude Code channels
 
-**Flows** — Claude Code plan mode · Claude Code `/goal` · The vibe-coding field manual · How to plan and scope a build with an LLM · Verifiable completion condition · The `/goal` evaluator only reads the transcript
+**Flows** — Claude Code plan mode · Claude Code `/goal` · One-way doors your agent can already walk through · The vibe-coding field manual · How to plan and scope a build with an LLM · Verifiable completion condition · The `/goal` evaluator only reads the transcript
 
 **Economics** — Why most agents default to the wrong Claude tier · Why fast mode isn’t a lower effort level · Stop paying full price for repeat LLM calls · Don’t break the prompt cache · Trim output, not the cache · Cache-stable prefix
 
@@ -66,4 +78,4 @@ Three findings in this book come from working practice rather than a paper, and 
 >
 > **The one thing worth carrying out of all of it:** give the agent a check it can run, and review the evidence rather than the claim. Every other practice in this book is a way of making that cheaper.
 
-The Claude Code Book · Edition 2026.07 · Bartłomiej Krupa · bartlomiejkrupa.dev
+The Claude Code Book · Edition 2026.08 · Bartłomiej Krupa · bartlomiejkrupa.dev

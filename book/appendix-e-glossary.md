@@ -17,6 +17,7 @@ _Appendix E_
 - **Hook** — Code that runs at a fixed lifecycle event regardless of what the model decides. The only deterministic layer in the harness.
 - **Lost in the middle** — The observed failure to reliably use information placed mid-context; recall is strongest at the start and end.
 - **MCP** — Model Context Protocol — the open standard for connecting external tools and data to an agent.
+- **One-way door** — A decision that is irreversible or nearly so; a two-way door is one you can reopen and walk back through. Reversal cost is knowable before you prompt, unlike speed, which makes it the axis worth routing a delegation on.
 - **Permission mode** — The session setting governing which actions run without asking: `default`, `acceptEdits`, `plan`, `auto`, `dontAsk`, `bypassPermissions`.
 - **Plan mode** — A permission mode where Claude reads and plans but makes no edits until you approve. Prompt-enforced, not sandboxed.
 - **Progressive disclosure** — Keeping the always-loaded surface small and pushing detail into files that load on demand.

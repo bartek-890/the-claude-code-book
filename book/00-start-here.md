@@ -42,7 +42,7 @@ Parts I–III are reference: read once, return often. Part IV is procedural — 
 
 > **Warning — Version note — read this one**
 >
-> Claude Code ships multiple releases per week. Every version-gated fact in this book is marked with the version that introduced it (for example, v2.1.187+). Behaviour described without a gate was current in **v2.1.210–219, July 2026**. Two things age fastest: model names with prices, and any count of built-in tools or commands. When a number in this book disagrees with `/help`, `/context`, or `claude --help` on your machine, your machine is right.
+> Claude Code ships multiple releases per week. Every version-gated fact in this book is marked with the version that introduced it (for example, v2.1.187+). Behaviour described without a gate was current in **v2.1.210–220, August 2026**. Two things age fastest: model names with prices, and any count of built-in tools or commands. When a number in this book disagrees with `/help`, `/context`, or `claude --help` on your machine, your machine is right.
 
 > **Note — A word on where the facts come from**
 >
